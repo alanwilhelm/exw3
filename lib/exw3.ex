@@ -680,9 +680,9 @@ defmodule ExW3 do
 
       {:ok, tx_hash} = ExW3.eth_send([tx])
 
-      {:ok, tx_receipt} = ExW3.tx_receipt(tx_hash)
+      # {:ok, tx_receipt} = ExW3.tx_receipt(tx_hash)
 
-      {tx_receipt["contractAddress"], tx_hash}
+      # {tx_receipt["contractAddress"], tx_hash}
     end
 
     def eth_call_helper(address, abi, method_name, args) do
@@ -937,7 +937,8 @@ defmodule ExW3 do
            {:ok, _} <- check_option(args[:options][:gas], :missing_gas),
            {:ok, bin} <- check_option([state[:bin], args[:bin]], :missing_binary) do
         {contract_addr, tx_hash} = deploy_helper(bin, contract_info[:abi], args)
-        result = {:ok, contract_addr, tx_hash}
+        {:ok, tx_hash} = deploy_helper(bin, contract_info[:abi], args)
+        result = {:ok, tx_hash}
         {:reply, result, state}
       else
         err -> {:reply, err, state}
