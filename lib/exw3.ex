@@ -368,7 +368,7 @@ defmodule ExW3 do
     output_types = Enum.map(abi[name]["outputs"], fn x -> x["type"] end)
     types_signature = Enum.join(["(", Enum.join(output_types, ","), ")"])
     output_signature = "#{name}(#{types_signature})"
-
+    IEx.pry
     outputs =
       ABI.decode(output_signature, trim_output)
       |> List.first()
