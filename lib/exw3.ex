@@ -293,7 +293,7 @@ defmodule ExW3 do
   @spec encode_event(binary()) :: binary()
   @doc "Encodes event based on signature"
   def encode_event(signature) do
-    ExthCrypto.Hash.Keccak.kec(signature) |> Base.encode16(case: :lower)
+    :keccakf1600.sha3_256(signature) |> Base.encode16(case: :lower)
   end
 
   @spec eth_call(list()) :: any()
