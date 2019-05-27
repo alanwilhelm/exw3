@@ -1,7 +1,7 @@
 defmodule ExW3 do
   Module.register_attribute(__MODULE__, :unit_map, persist: true, accumulate: false)
   Module.register_attribute(__MODULE__, :client_type, persist: true, accumulate: false)
-
+  require IEx
   @unit_map %{
     :noether => 0,
     :wei => 1,
@@ -97,7 +97,7 @@ defmodule ExW3 do
   @doc "returns a checksummed address"
   def to_checksum_address(address) do
     address = String.replace(address, ~r/^0x/, "")
-
+    IEx.pry
     hash =
       :keccakf1600.sha3_256(String.downcase(address))
       |> Base.encode16(case: :lower)
