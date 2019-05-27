@@ -1,7 +1,7 @@
 defmodule ExW3 do
   Module.register_attribute(__MODULE__, :unit_map, persist: true, accumulate: false)
   Module.register_attribute(__MODULE__, :client_type, persist: true, accumulate: false)
-  require IEx
+
   @unit_map %{
     :noether => 0,
     :wei => 1,
@@ -66,7 +66,7 @@ defmodule ExW3 do
   @spec keccak256(binary()) :: binary()
   @doc "Returns a 0x prepended 32 byte hash of the input string"
   def keccak256(string) do
-    Enum.join(["0x", :keccakf1600.sha3_256(string) |> Base.encode16(case: :lower)], "")
+    Enum.join(["0x", ExthCrypto.Hash.Keccak.kec(string) |> Base.encode16(case: :lower)], "")
   end
 
   @spec bytes_to_string(binary()) :: binary()
@@ -97,9 +97,9 @@ defmodule ExW3 do
   @doc "returns a checksummed address"
   def to_checksum_address(address) do
     address = String.replace(address, ~r/^0x/, "")
-    IEx.pry
+
     hash =
-      :keccakf1600.sha3_256(String.downcase(address))
+      ExthCrypto.Hash.Keccak.kec(String.downcase(address))
       |> Base.encode16(case: :lower)
       |> String.replace(~r/^0x/, "")
 
@@ -293,7 +293,7 @@ defmodule ExW3 do
   @spec encode_event(binary()) :: binary()
   @doc "Encodes event based on signature"
   def encode_event(signature) do
-    :keccakf1600.sha3_256(signature) |> Base.encode16(case: :lower)
+    ExthCrypto.Hash.Keccak.kec(signature) |> Base.encode16(case: :lower)
   end
 
   @spec eth_call(list()) :: any()
@@ -368,7 +368,7 @@ defmodule ExW3 do
     output_types = Enum.map(abi[name]["outputs"], fn x -> x["type"] end)
     types_signature = Enum.join(["(", Enum.join(output_types, ","), ")"])
     output_signature = "#{name}(#{types_signature})"
-    IEx.pry
+
     outputs =
       ABI.decode(output_signature, trim_output)
       |> List.first()
@@ -389,7 +389,7 @@ defmodule ExW3 do
   @doc "Returns the 4 character method id based on the hash of the method signature"
   def method_signature(abi, name) do
     if abi[name] do
-      input_signature = "#{name}#{types_signature(abi, name)}" |> :keccakf1600.sha3_256()
+      input_signature = "#{name}#{types_signature(abi, name)}" |> ExthCrypto.Hash.Keccak.kec()
 
       # Take first four bytes
       <<init::binary-size(4), _rest::binary>> = input_signature
@@ -450,7 +450,7 @@ defmodule ExW3 do
     if abi[name]["inputs"] do
       input_types = Enum.map(abi[name]["inputs"], fn x -> x["type"] end)
       types_signature = Enum.join(["(", Enum.join(input_types, ","), ")"])
-      input_signature = "#{name}#{types_signature}" |> :keccakf1600.sha3_256()
+      input_signature = "#{name}#{types_signature}" |> ExthCrypto.Hash.Keccak.kec()
 
       # Take first four bytes
       <<init::binary-size(4), _rest::binary>> = input_signature
