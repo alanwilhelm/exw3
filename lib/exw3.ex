@@ -930,6 +930,9 @@ defmodule ExW3 do
       {:reply, {:ok, formatted_logs}, state}
     end
 
+    #
+    # All callbacks below
+    #
     def handle_call({:deploy, {name, args}}, _from, state) do
       contract_info = state[name]
 
