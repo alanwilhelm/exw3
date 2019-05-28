@@ -2,6 +2,7 @@ defmodule ExW3 do
   Module.register_attribute(__MODULE__, :unit_map, persist: true, accumulate: false)
   Module.register_attribute(__MODULE__, :client_type, persist: true, accumulate: false)
   require IEx
+  require Logger
   
   @unit_map %{
     :noether => 0,
