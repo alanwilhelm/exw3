@@ -29,4 +29,4 @@ use Mix.Config
 #   client_type: :ipc,
 #   ipc_path: "/.local/share/io.parity.ethereum/jsonrpc.ipc"
 
-config :ethereumex, client_type: :http, url: System.get_env("PERKLE_HOST")
+config :ethereumex, client_type: :http, url: #{System.get_env("PERKLE_HOST") <> ":" <> {System.get_env("PERKLE_HOST"}
