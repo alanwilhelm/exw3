@@ -128,8 +128,11 @@ defmodule ExW3 do
   end
 
   defp call_client(method_name, arguments \\ []) do
+    Logger.warn "Calling Eth client with: "
+    Logger.warn "#{inspect method_name}"
+    Logger.warn "#{inspect arguments}"
     case get_client_type() do
-      :http -> apply(Ethereumex.HttpClient, method_name, arguments)
+      :http -> apply(Perkle, method_name, arguments)
       :ipc -> apply(Ethereumex.IpcClient, method_name, arguments)
       _ -> {:error, :invalid_client_type}
     end
