@@ -347,7 +347,7 @@ defmodule ExW3 do
   end
 
   @spec load_bin(binary()) :: binary()
-  @doc "Loads the bin ar the file path"
+  @doc "Loads the bin at the file path"
   def load_bin(file_path) do
     file = File.read(Path.join(System.cwd(), file_path))
 
