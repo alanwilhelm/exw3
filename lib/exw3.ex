@@ -3,7 +3,7 @@ defmodule ExW3 do
   Module.register_attribute(__MODULE__, :client_type, persist: true, accumulate: false)
   require IEx
   require Logger
-  
+
   @unit_map %{
     :noether => 0,
     :wei => 1,
@@ -133,9 +133,9 @@ defmodule ExW3 do
     Logger.warn "Calling Eth client with: "
     Logger.warn "#{inspect method_name}"
     Logger.warn "#{inspect arguments}"
-    IEx.pry
     case get_client_type() do
-      :http -> apply(Perkle, method_name, arguments)
+      # :http -> apply(Perkle, method_name, arguments)
+      :http -> apply(Ethereumex.HttpClient, method_name, arguments)
       :ipc -> apply(Ethereumex.IpcClient, method_name, arguments)
       _ -> {:error, :invalid_client_type}
     end
